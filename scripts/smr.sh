@@ -22,23 +22,6 @@ gwas_summary=$1;
 outdir=$2;
 population=$3;
 eqtl_summary=$4
-<<<<<<< HEAD:scripts/smr_bak.sh
-bindir='/mnt/d/eqtl'
-output="eqtl"
-#./smr.sh UKB_bv_height_SMR_0.05.txt  output eur westra_eqtl_hg19
-${bindir}/smr_Linux  --bfile ${bindir}/g1000/g1000_${population}   \
---gwas-summary ${gwas_summary} \
---beqtl-summary ${bindir}/resources/${eqtl_summary} \
---out ${outdir}/${output}
-||||||| f17817a:scripts/smr.sh
-bindir='.'
-output="eqtl"
-#./smr.sh UKB_bv_height_SMR_0.05.txt  output eur westra_eqtl_hg19
-${bindir}/smr_Linux  --bfile ${bindir}/g1000/g1000_${population}/g1000_${population}   \
---gwas-summary ${gwas_summary} \
---beqtl-summary ${bindir}/resources/${eqtl_summary} \
---out ${outdir}/${output}
-=======
 heidi=$5       #{on, off}
 trans=$6;      #{on,off} #SMR and HEIDI tests in trans regions
 smr_multi=$7;  #{on,off}  #Multi-SNP-based SMR test
@@ -438,4 +421,3 @@ do
   fi
 
 done
->>>>>>> de8b0dcce0235bf9736c6b159c8cab9a594199c4:scripts/smr.sh
