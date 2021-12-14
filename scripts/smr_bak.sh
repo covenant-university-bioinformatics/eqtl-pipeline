@@ -20,10 +20,10 @@ gwas_summary=$1;
 outdir=$2;
 population=$3;
 eqtl_summary=$4
-bindir='.'
+bindir='/mnt/d/eqtl'
 output="eqtl"
 #./smr.sh UKB_bv_height_SMR_0.05.txt  output eur westra_eqtl_hg19
-${bindir}/smr_Linux  --bfile ${bindir}/g1000/g1000_${population}/g1000_${population}   \
+${bindir}/smr_Linux  --bfile ${bindir}/g1000/g1000_${population}   \
 --gwas-summary ${gwas_summary} \
 --beqtl-summary ${bindir}/resources/${eqtl_summary} \
 --out ${outdir}/${output}
