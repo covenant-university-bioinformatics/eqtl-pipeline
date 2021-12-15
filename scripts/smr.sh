@@ -264,12 +264,12 @@ GTEx_v8_tissue=${24};
 ##SMR GTEx 8
 if [[ "$GTEx_v8_tissue" != "" ]]; then
 	smr_out=${GTEx_v8_tissue};
-  smr_cmd GTEx8/${GTEx_v8_tissue} ${smr_out};
+  smr_cmd GTEx8/${GTEx_v8_tissue}/${GTEx_v8_tissue} ${smr_out};
   if [[ ${trans} = "on" ]]; then
-    smr_trans_cmd GTEx8/${GTEx_v8_tissue} ${smr_out}_trans;
+    smr_trans_cmd GTEx8/${GTEx_v8_tissue}/${GTEx_v8_tissue} ${smr_out}_trans;
   fi
 
   if [[ ${smr_multi} = "on" ]]; then
-      smr_muti_cmd GTEx8/${GTEx_v8_tissue} ${smr_out}_multi;
+      smr_muti_cmd GTEx8/${GTEx_v8_tissue}/${GTEx_v8_tissue} ${smr_out}_multi;
   fi
 fi
