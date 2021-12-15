@@ -21,33 +21,33 @@ db="$bindir";
 gwas_summary=$1;
 outdir=$2;
 population=$3;
-eqtl_summary=$4
-heidi=$5       #{on, off}
-trans=$6;      #{on,off} #SMR and HEIDI tests in trans regions
-smr_multi=$7;  #{on,off}  #Multi-SNP-based SMR test
+#eqtl_summary=$4
+heidi=$4       #{on, off}
+trans=$5;      #{on,off} #SMR and HEIDI tests in trans regions
+smr_multi=$6;  #{on,off}  #Multi-SNP-based SMR test
 
 
 ### Parameters
-maf=$8; #The default value is 0.05
+maf=$7; #The default value is 0.05
 diff_freq=$9 # The default value is 0.2.
-diff_freq_prop=${10}; # The default value is 0.05.
-cis_wind=${11} #The default value is 2000Kb.
-peqtl_smr=${12};  # The default value is 5.0e-8.
-ld_upper_limit=${13}; #The default value is 0.9
-ld_lower_limit=${14}; #The default value is 0.05.
+diff_freq_prop=9 ; # The default value is 0.05.
+cis_wind=${10} #The default value is 2000Kb.
+peqtl_smr=${11};  # The default value is 5.0e-8.
+ld_upper_limit=${12}; #The default value is 0.9
+ld_lower_limit=${13}; #The default value is 0.05.
 
 ### Heidi Parameters
-peqtl_heidi=${15}; #The default value is 1.57e-3,
-heidi_mtd=${16}; #{0,1} The default value is 1
-heidi_min_m=${17};  #  The default value is 3
-heidi_max_m=${18}; # The default value is 20.
+peqtl_heidi=${14}; #The default value is 1.57e-3,
+heidi_mtd=${15}; #{0,1} The default value is 1
+heidi_min_m=${16};  #  The default value is 3
+heidi_max_m=${17}; # The default value is 20.
 
 ### Parameters for  trans regions analysis
-trans_wind=${19}
+trans_wind=${18}
 
 ### Parameters for Multi-SNP-based SMR test
-set_wind=${20}; # defines a window width (Kb).-9 resulting in selecting SNPs in the whole cis-region if this option is not specified.
-ld_multi_snp=${21} # The default value is 0.1.
+set_wind=${19}; # defines a window width (Kb).-9 resulting in selecting SNPs in the whole cis-region if this option is not specified.
+ld_multi_snp=${20} # The default value is 0.1.
 
 ### Set default values
 if [[ -z "$maf" ]];then
@@ -136,7 +136,7 @@ fi
 
 
 
-#./smr.sh UKB_bv_height_SMR_0.05.txt  output eur westra_eqtl_hg19 on on on
+#./smr.sh UKB_bv_height_SMR_0.05.txt  output eur  on on on
 #${bindir}/smr_Linux  --bfile ${bindir}/g1000/g1000_${population}   \
 #--gwas-summary ${gwas_summary} \
 #--beqtl-summary ${bindir}/resources/${eqtl_summary} \
@@ -183,7 +183,7 @@ smr_multi_cmd(){
 }
 
 ##### eqtl ananlysis
-Westra_eqtl=${22} #{true, false}
+Westra_eqtl=${21} #{true, false}
 Westra_eqtl="true";
 if [[ "$Westra_eqtl" = "true" ]]; then
     smr_out="Westra";
@@ -197,7 +197,7 @@ if [[ "$Westra_eqtl" = "true" ]]; then
     fi
 fi
 
-CAGE_eqtl=${23} #{true, false}
+CAGE_eqtl=${22} #{true, false}
 CAGE_eqtl="true";
 if [[ "$CAGE_eqtl" = "true" ]]; then
     smr_out="CAGE";
@@ -211,7 +211,7 @@ if [[ "$CAGE_eqtl" = "true" ]]; then
     fi
 fi
 
-GTEx_v8_tissue=${24};
+GTEx_v8_tissue=${23};
 # Adipose_Subcutaneous
 # Adipose_Visceral_Omentum
 # Adrenal_Gland
