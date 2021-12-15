@@ -15,8 +15,8 @@
 
 #### Input gwas_summary format
 #SNP    A1  A2  freq    b   se  p   n
-bindir='.'
-db_dir="$bindir";
+bindir='/mnt/d/eqtl'
+db="$bindir";
 
 gwas_summary=$1;
 outdir=$2;
@@ -168,7 +168,7 @@ smr_trans_cmd(){
   --out ${outdir}/$2
 }
 
-smr_muti_cmd(){
+smr_multi_cmd(){
   ${bindir}/smr_Linux  --bfile ${db}/g1000/g1000_${population}   \
   --gwas-summary ${gwas_summary} \
   --beqtl-summary ${db}/resources/$1 \
@@ -193,7 +193,7 @@ if [[ "$Westra_eqtl" = "true" ]]; then
     fi
 
     if [[ ${smr_multi} = "on" ]]; then
-        smr_muti_cmd westra_eqtl_hg19 ${smr_out}_multi;
+        smr_multi_cmd westra_eqtl_hg19 ${smr_out}_multi;
     fi
 fi
 
@@ -207,7 +207,7 @@ if [[ "$CAGE_eqtl" = "true" ]]; then
     fi
 
     if [[ ${smr_multi} = "on" ]]; then
-        smr_muti_cmd CAGE.sparse ${smr_out}_multi;
+        smr_multi_cmd CAGE.sparse ${smr_out}_multi;
     fi
 fi
 
