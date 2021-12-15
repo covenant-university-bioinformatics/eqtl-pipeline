@@ -15,8 +15,8 @@
 
 #### Input gwas_summary format
 #SNP    A1  A2  freq    b   se  p   n
-bindir='.'
-db_dir="$bindir";
+bindir='/mnt/d/eqtl'
+db="$bindir";
 
 gwas_summary=$1;
 outdir=$2;
