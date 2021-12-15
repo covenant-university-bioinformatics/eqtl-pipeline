@@ -209,215 +209,67 @@ if [[ "$CAGE_eqtl" = "true" ]]; then
     fi
 fi
 
-GTEx_v8_array=()
-Adipose_Subcutaneous_GTEx_v8=${24} #{true, false}
-if [[ ${Adipose_Subcutaneous_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Adipose_Subcutaneous")
-fi
-Adipose_Visceral_Omentum_GTEx_v8=${25} #{true, false}
-if [[ ${Adipose_Visceral_Omentum_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Adipose_Visceral_Omentum")
-fi
-Adrenal_Gland_GTEx_v8=${26} #{true, false}
-if [[ ${Adrenal_Gland_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Adrenal_Gland")
-fi
-Artery_Aorta_GTEx_v8=${27} #{true, false}
-if [[ ${Artery_Aorta_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Artery_Aorta")
-fi
-Artery_Coronary_GTEx_v8=${28} #{true, false}
-if [[ ${Artery_Coronary_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Artery_Coronary")
-fi
-Artery_Tibial_GTEx_v8=${29} #{true, false}
-if [[ ${Artery_Tibial_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Artery_Tibial")
-fi
-Brain_Amygdala_GTEx_v8=${30} #{true, false}
-if [[ ${Brain_Amygdala_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Brain_Amygdala")
-fi
-Brain_Anterior_cingulate_cortex_BA24_GTEx_v8=${31} #{true, false}
-if [[ ${Brain_Anterior_cingulate_cortex_BA24_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Brain_Anterior_cingulate_cortex_BA24")
-fi
-Brain_Caudate_basal_ganglia_GTEx_v8=${32} #{true, false}
-if [[ ${Brain_Caudate_basal_ganglia_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Brain_Caudate_basal_ganglia")
-fi
-Brain_Cerebellar_Hemisphere_GTEx_v8=${33} #{true, false}
-if [[ ${Brain_Cerebellar_Hemisphere_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Brain_Cerebellar_Hemisphere")
-fi
-Brain_Cerebellum_GTEx_v8=${34} #{true, false}
-if [[ ${Brain_Cerebellum_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Brain_Cerebellum")
-fi
-Brain_Cortex_GTEx_v8=${35} #{true, false}
-if [[ ${Brain_Cortex_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Brain_Cortex")
-fi
-Brain_Frontal_Cortex_BA9_GTEx_v8=${36} #{true, false}
-if [[ ${Brain_Frontal_Cortex_BA9_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Brain_Frontal_Cortex_BA9")
-fi
-Brain_Hippocampus_GTEx_v8=${37} #{true, false}
-if [[ ${Brain_Hippocampus_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Brain_Hippocampus")
-fi
-Brain_Hypothalamus_GTEx_v8=${38} #{true, false}
-if [[ ${Brain_Hypothalamus_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Brain_Hypothalamus")
-fi
-Brain_Nucleus_accumbens_basal_ganglia_GTEx_v8=${39} #{true, false}
-if [[ ${Brain_Nucleus_accumbens_basal_ganglia_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Brain_Nucleus_accumbens_basal_ganglia")
-fi
-Brain_Putamen_basal_ganglia_GTEx_v8=${40} #{true, false}
-if [[ ${Brain_Putamen_basal_ganglia_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Brain_Putamen_basal_ganglia")
-fi
-Brain_Spinal_cord_cervical_c_1_GTEx_v8=${41} #{true, false} ----> chnage hyphon to underscore
-if [[ ${Brain_Spinal_cord_cervical_c_1_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Brain_Spinal_cord_cervical_c_1")
-fi
-Brain_Substantia_nigra_GTEx_v8=${42} #{true, false}
-if [[ ${Brain_Substantia_nigra_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Brain_Substantia_nigra")
-fi
-Breast_Mammary_Tissue_GTEx_v8=${43} #{true, false}
-if [[ ${Breast_Mammary_Tissue_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Breast_Mammary_Tissue")
-fi
-Cells_Cultured_fibroblasts_GTEx_v8=${44} #{true, false}
-if [[ ${Cells_Cultured_fibroblasts_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Cells_Cultured_fibroblasts")
-fi
-Cells_EBV_transformed_lymphocytes_GTEx_v8=${45} #{true, false} --->
-if [[ ${Cells_EBV_transformed_lymphocytes_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Cells_EBV_transformed_lymphocytes")
-fi
-Colon_Sigmoid_GTEx_v8=${46} #{true, false}
-if [[ ${Colon_Sigmoid_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Colon_Sigmoid")
-fi
-Colon_Transverse_GTEx_v8=${47} #{true, false}
-if [[ ${Colon_Transverse_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Colon_Transverse")
-fi
-Esophagus_Gastroesophageal_Junction_GTEx_v8=${48} #{true, false}
-if [[ ${Esophagus_Gastroesophageal_Junction_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Esophagus_Gastroesophageal_Junction")
-fi
-Esophagus_Mucosa_GTEx_v8=${49} #{true, false}
-if [[ ${Esophagus_Mucosa_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Esophagus_Mucosa")
-fi
-Esophagus_Muscularis_GTEx_v8=${50} #{true, false}
-if [[ ${Esophagus_Muscularis_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Esophagus_Muscularis")
-fi
-Heart_Atrial_Appendage_GTEx_v8=${51} #{true, false}
-if [[ ${Heart_Atrial_Appendage_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Heart_Atrial_Appendage")
-fi
-Heart_Left_Ventricle_GTEx_v8=${52} #{true, false}
-if [[ ${Heart_Left_Ventricle_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Heart_Left_Ventricle")
-fi
-Kidney_Cortex_GTEx_v8=${53} #{true, false}
-if [[ ${Kidney_Cortex_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Kidney_Cortex")
-fi
-Liver_GTEx_v8=${54} #{true, false}
-if [[ ${Liver_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Liver")
-fi
-Lung_GTEx_v8=${55} #{true, false}
-if [[ ${Lung_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Lung")
-fi
-Minor_Salivary_Gland_GTEx_v8=${56} #{true, false}
-if [[ ${Minor_Salivary_Gland_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Minor_Salivary_Gland")
-fi
-Muscle_Skeletal_GTEx_v8=${57} #{true, false}
-if [[ ${Muscle_Skeletal_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Muscle_Skeletal")
-fi
-Nerve_Tibial_GTEx_v8=${58} #{true, false}
-if [[ ${Nerve_Tibial_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Nerve_Tibial")
-fi
-Ovary_GTEx_v8=${59} #{true, false}
-if [[ ${Ovary_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Ovary")
-fi
-Pancreas_GTEx_v8=${60} #{true, false}
-if [[ ${Pancreas_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Pancreas")
-fi
-Pituitary_GTEx_v8=${61} #{true, false}
-if [[ ${Pituitary_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Pituitary")
-fi
-Prostate_GTEx_v8=${62} #{true, false}
-if [[ ${Prostate_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Prostate")
-fi
-Skin_Not_Sun_Exposed_Suprapubic_GTEx_v8=${63} #{true, false}
-if [[ ${Skin_Not_Sun_Exposed_Suprapubic_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Skin_Not_Sun_Exposed_Suprapubic")
-fi
-Skin_Sun_Exposed_Lower_leg_GTEx_v8=${64} #{true, false}
-if [[ ${Skin_Sun_Exposed_Lower_leg_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Skin_Sun_Exposed_Lower_leg")
-fi
-Small_Intestine_Terminal_Ileum_GTEx_v8=${65} #{true, false}
-if [[ ${Small_Intestine_Terminal_Ileum_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Small_Intestine_Terminal_Ileum")
-fi
-Spleen_GTEx_v8=${66} #{true, false}
-if [[ ${Spleen_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Spleen")
-fi
-Stomach_GTEx_v8=${67} #{true, false}
-if [[ ${Stomach_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Stomach")
-fi
-Testis_GTEx_v8=${68} #{true, false}
-if [[ ${Testis_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Testis")
-fi
-Thyroid_GTEx_v8=${69} #{true, false}
-if [[ ${Thyroid_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Thyroid")
-fi
-Uterus_GTEx_v8=${70} #{true, false}
-if [[ ${Uterus_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Uterus")
-fi
-Vagina_GTEx_v8=${71} #{true, false}
-if [[ ${Vagina_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Vagina")
-fi
-Whole_Blood_GTEx_v8=${72} #{true, false}
-if [[ ${Whole_Blood_GTEx_v8} = "true" ]]; then
-    GTEx_v8_array+=("Whole_Blood")
-fi
+GTEx_v8_tissue=${24};
+# Adipose_Subcutaneous
+# Adipose_Visceral_Omentum
+# Adrenal_Gland
+# Artery_Aorta
+# Artery_Coronary
+# Artery_Tibial
+# Brain_Amygdala
+# Brain_Anterior_cingulate_cortex_BA24
+# Brain_Caudate_basal_ganglia
+# Brain_Cerebellar_Hemisphere
+# Brain_Cerebellum
+# Brain_Cortex
+# Brain_Frontal_Cortex_BA9
+# Brain_Hippocampus
+# Brain_Hypothalamus
+# Brain_Nucleus_accumbens_basal_ganglia
+# Brain_Putamen_basal_ganglia
+# Brain_Spinal_cord_cervical_c_1  ----> chnage hyphon to underscore
+# Brain_Substantia_nigra
+# Breast_Mammary_Tissue
+# Cells_Cultured_fibroblasts
+# Cells_EBV_transformed_lymphocytes  ---> chnage hyphon to underscore
+# Colon_Sigmoid
+# Colon_Transverse
+# Esophagus_Gastroesophageal_Junction
+# Esophagus_Mucosa
+# Esophagus_Muscularis
+# Heart_Atrial_Appendage
+# Heart_Left_Ventricle
+# Kidney_Cortex
+# Liver
+# Lung
+# Minor_Salivary_Gland
+# Muscle_Skeletal
+# Nerve_Tibial
+# Ovary
+# Pancreas
+# Pituitary
+# Prostate
+# Skin_Not_Sun_Exposed_Suprapubic
+# Skin_Sun_Exposed_Lower_leg
+# Small_Intestine_Terminal_Ileum
+# Spleen
+# Stomach
+# Testis
+# Thyroid
+# Uterus
+# Vagina
+# Whole_Blood
+
 
 ##SMR GTEx 8
-for tissue in "${GTEx_v8_array[@]}"
-do
-	smr_out=${tissue};
-  smr_cmd GTEx8/${tissue} ${smr_out};
+if [[ "$GTEx_v8_tissue" != "" ]]; then
+	smr_out=${GTEx_v8_tissue};
+  smr_cmd GTEx8/${GTEx_v8_tissue} ${smr_out};
   if [[ ${trans} = "on" ]]; then
-    smr_trans_cmd GTEx8/${tissue} ${smr_out}_trans;
+    smr_trans_cmd GTEx8/${GTEx_v8_tissue} ${smr_out}_trans;
   fi
 
   if [[ ${smr_multi} = "on" ]]; then
-      smr_muti_cmd GTEx8/${tissue} ${smr_out}_multi;
+      smr_muti_cmd GTEx8/${GTEx_v8_tissue} ${smr_out}_multi;
   fi
-
-done
+fi
