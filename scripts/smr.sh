@@ -29,8 +29,8 @@ smr_multi=$6;  #{on,off}  #Multi-SNP-based SMR test
 
 ### Parameters
 maf=$7; #The default value is 0.05
-diff_freq=$9 # The default value is 0.2.
-diff_freq_prop=9 ; # The default value is 0.05.
+diff_freq=$8 # The default value is 0.2.
+diff_freq_prop=$9 ; # The default value is 0.05.
 cis_wind=${10} #The default value is 2000Kb.
 peqtl_smr=${11};  # The default value is 5.0e-8.
 ld_upper_limit=${12}; #The default value is 0.9
