@@ -1,7 +1,9 @@
 #!/usr/bin/env Rscript
 
 # To run it
-###Rscript --vanilla plot_qq_manhattan.R SMR_out output-dir outfile_prefix
+###Rscript --vanilla plot_qq_manhattan.R SMR_out output-dir outfile_prefix \
+# ${smr_thresh} ${heidi_thresh} ${plotWindow} \
+# ${max_anno_probe}
 
 ##### Dependencies ---> qqman R package
 ###  Installation
@@ -26,12 +28,11 @@ qq(GWAS_summary$p_SMR, main = "Q-Q plot of GWAS p-values")
 dev.off()
 manhattan =paste0(output_dir,"/", output_prefix, "_", "manhattan.png")
 png(manhattan, width=1000, height=500)
-manhattan(GWAS_summary, chr="topSNP_chr", bp="topSNP_bp", snp="topSNP", p="p_SMR" )
+manhattan(GWAS_summary, chr="topSNP_chr", bp="topSNP_bp", snp="topSNP", p="p_SMR", suggestiveline = F)
 dev.off()
 
-#probes
-manhattan_probes =paste0(output_dir,"/", output_prefix, "_probes_", "manhattan.png")
-png(manhattan_probes, width=1000, height=500)
-manhattan(GWAS_summary, chr="ProbeChr", bp="Probe_bp", snp="probeID", p="p_SMR" )
-dev.off()
-
+##probes
+#manhattan_probes =paste0(output_dir,"/", output_prefix, "_probes_", "manhattan.png")
+#png(manhattan_probes, width=1000, height=500)
+#manhattan(GWAS_summary, chr="ProbeChr", bp="Probe_bp", snp="probeID", p="p_SMR" )
+#dev.off()
