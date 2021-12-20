@@ -152,6 +152,8 @@ smr_cmd(){
   --peqtl-smr ${peqtl_smr} \
   ${HEIDI_cmd} \
   --out ${outdir}/$2
+  
+  Rscript --vanilla  ${bindir}/plot_qq_manhattan.R  ${outdir}/$2.smr ${outdir} $2
 }
 
 smr_trans_cmd(){
@@ -272,6 +274,6 @@ if [[ "$GTEx_v8_tissue" != "" ]]; then
   fi
 
   if [[ ${smr_multi} = "on" ]]; then
-      smr_muti_cmd GTEx8/${GTEx_v8_tissue}/${GTEx_v8_tissue} ${smr_out}_multi;
+      smr_multi_cmd GTEx8/${GTEx_v8_tissue}/${GTEx_v8_tissue} ${smr_out}_multi;
   fi
 fi
