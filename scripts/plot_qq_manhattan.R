@@ -28,7 +28,7 @@ qq(GWAS_summary$p_SMR, main = "Q-Q plot of GWAS p-values")
 dev.off()
 manhattan =paste0(output_dir,"/", output_prefix, "_", "manhattan.png")
 png(manhattan, width=1000, height=500)
-manhattan(GWAS_summary, chr="topSNP_chr", bp="topSNP_bp", snp="topSNP", p="p_SMR", suggestiveline = F)
+manhattan(GWAS_summary, chr="topSNP_chr", bp="topSNP_bp", snp="topSNP", p="p_SMR", col = c("blue4", "orange3"), suggestiveline = F)
 dev.off()
 
 ##probes

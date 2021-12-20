@@ -152,7 +152,7 @@ smr_cmd(){
   --peqtl-smr ${peqtl_smr} \
   ${HEIDI_cmd} \
   --out ${outdir}/$2
-  
+
   Rscript --vanilla  ${bindir}/plot_qq_manhattan.R  ${outdir}/$2.smr ${outdir} $2
 }
 
@@ -182,6 +182,8 @@ smr_multi_cmd(){
   ${HEIDI_cmd} \
   ${smr_multi_cmd} \
   --out ${outdir}/$2
+
+  Rscript --vanilla  ${bindir}/plot_qq_manhattan.R  ${outdir}/$2.msmr ${outdir} $2
 }
 
 ##### eqtl ananlysis
