@@ -27,7 +27,7 @@ SMRLocusPlot(data=SMRData, smr_thresh=smr_thresh, heidi_thresh=heidi_thresh, plo
 # max_anno_probe: maximum number of probe names to be displayed on the figure. The default value is 16.
 dev.off()
 # Plot effect sizes from GWAS against those from eQTL study:
-Effect_sizes =paste0(output_dir,"/", output_prefix, "_", "Effect_sizes")
+Effect_sizes =paste0(output_dir,"/", output_prefix, "_", "Effect_sizes.png")
 png(Effect_sizes)
 SMREffectPlot(data=SMRData)
 # trait_name: name of the trait or disease.

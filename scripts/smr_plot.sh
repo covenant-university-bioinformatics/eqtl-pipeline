@@ -21,32 +21,32 @@ db="$bindir";
 gwas_summary=$1;
 outdir=$2;
 population=$3;
-#eqtl_summary=$4
-probe=$4;
-probe_wind=$5; #default 500
-gene_list=$6; #{glist-hg19, glist-hg38} -->default glist-hg19
+eqtl_summary=$4
+probe=$5;
+probe_wind=$6; #default 500
+gene_list=$7; #{glist-hg19, glist-hg38} -->default glist-hg19
 
 
 ### Parameters
-maf=$6; #The default value is 0.05
-diff_freq=$8 # The default value is 0.2.
-diff_freq_prop=$9 ; # The default value is 0.05.
-cis_wind=${10} #The default value is 2000Kb.
-peqtl_smr=${11};  # The default value is 5.0e-8.
-ld_upper_limit=${12}; #The default value is 0.9
-ld_lower_limit=${13}; #The default value is 0.05.
+maf=$8; #The default value is 0.05
+diff_freq=$9 # The default value is 0.2.
+diff_freq_prop=${10} ; # The default value is 0.05.
+cis_wind=${11} #The default value is 2000Kb.
+peqtl_smr=${12};  # The default value is 5.0e-8.
+ld_upper_limit=${13}; #The default value is 0.9
+ld_lower_limit=${14}; #The default value is 0.05.
 
 ### Heidi Parameters
-peqtl_heidi=${14}; #The default value is 1.57e-3,
-heidi_mtd=${15}; #{0,1} The default value is 1
-heidi_min_m=${16};  #  The default value is 3
-heidi_max_m=${17}; # The default value is 20.
+peqtl_heidi=${15}; #The default value is 1.57e-3,
+heidi_mtd=${16}; #{0,1} The default value is 1
+heidi_min_m=${17};  #  The default value is 3
+heidi_max_m=${18}; # The default value is 20.
 
 ### plot Parameters
-smr_thresh=${18} # default 8.4e-6,
-heidi_thresh=${19} # default 0.05,
-plotWindow=${20}  # default 1000,
-max_anno_probe=${21} ## default 16
+smr_thresh=${19} # default 8.4e-6,
+heidi_thresh=${20} # default 0.05,
+plotWindow=${21}  # default 1000,
+max_anno_probe=${22} ## default 16
 ### Set default values
 if [[ -z "$maf" ]];then
     maf=0.05;
@@ -130,11 +130,10 @@ fi
 
 
 
-#./smr.sh UKB_bv_height_SMR_0.05.txt  output eur  ILMN_2349633 500 glist-hg19
-#${bindir}/smr_Linux  --bfile ${bindir}/g1000/g1000_${population}   \
-#--gwas-summary ${gwas_summary} \
-#--beqtl-summary ${bindir}/resources/${eqtl_summary} \
-#--out ${outdir}/${output}
+#./smr_plot.sh UKB_bv_height_SMR_0.05.txt  output eur  Westra_eqtl ILMN_2349633 500 glist-hg19
+#./smr_plot.sh UKB_bv_height_SMR_0.05.txt  output eur  CAGE_eqtl ILMN_2349633 500 glist-hg19
+#./smr_plot.sh UKB_bv_height_SMR_0.05.txt  output eur  Lung ENSG00000272512 500 glist-hg19
+
 smr_cmd(){
   ${bindir}/smr_Linux  --bfile ${db}/g1000/g1000_${population}   \
   --gwas-summary ${gwas_summary} \
@@ -156,21 +155,11 @@ smr_cmd(){
 }
 
 ##### eqtl ananlysis
-Westra_eqtl=${22} #{true, false}
-Westra_eqtl="true";
-if [[ "$Westra_eqtl" = "true" ]]; then
-    smr_out="Westra";
-    smr_cmd westra_eqtl_hg19 ${smr_out};
-fi
 
-CAGE_eqtl=${23} #{true, false}
-CAGE_eqtl="true";
-if [[ "$CAGE_eqtl" = "true" ]]; then
-    smr_out="CAGE";
-    smr_cmd CAGE.sparse ${smr_out};
-fi
-
-GTEx_v8_tissue=${24};
+#### ALL options
+#Westra_eqtl
+#CAGE_eqtl
+##GTEx_v8_tissue=${24};
 # Adipose_Subcutaneous
 # Adipose_Visceral_Omentum
 # Adrenal_Gland
@@ -220,10 +209,16 @@ GTEx_v8_tissue=${24};
 # Uterus
 # Vagina
 # Whole_Blood
-
-GTEx_v8_tissue="Lung";
-##SMR GTEx 8
-if [[ "$GTEx_v8_tissue" != "" ]]; then
-	smr_out=${GTEx_v8_tissue};
-  smr_cmd GTEx8/${GTEx_v8_tissue}/${GTEx_v8_tissue} ${smr_out};
+if [[ "$eqtl_summary" = "$Westra_eqtl"  ]]; then
+    smr_out="Westra";
+    smr_cmd westra_eqtl_hg19 ${smr_out};
+elif [[ "$eqtl_summary" = "$CAGE_eqtl"  ]]; then
+    smr_out="CAGE";
+    smr_cmd CAGE.sparse ${smr_out};
+else 
+   smr_out=${eqtl_summary};
+   smr_cmd GTEx8/${eqtl_summary}/${eqtl_summary} ${smr_out};
 fi
+
+
+	
