@@ -21,6 +21,7 @@ db="$bindir";
 gwas_summary=$1;
 outdir=$2;
 population=$3;
+#Tissue,Cage,Westra
 eqtl_summary=$4
 probe=$5;
 probe_wind=$6; #default 500
@@ -209,10 +210,10 @@ smr_cmd(){
 # Uterus
 # Vagina
 # Whole_Blood
-if [[ "$eqtl_summary" = "$Westra_eqtl"  ]]; then
+if [[ "$eqtl_summary" = "Westra_eqtl"  ]]; then
     smr_out="Westra";
     smr_cmd westra_eqtl_hg19 ${smr_out};
-elif [[ "$eqtl_summary" = "$CAGE_eqtl"  ]]; then
+elif [[ "$eqtl_summary" = "CAGE_eqtl"  ]]; then
     smr_out="CAGE";
     smr_cmd CAGE.sparse ${smr_out};
 else 
