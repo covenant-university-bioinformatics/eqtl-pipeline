@@ -188,7 +188,7 @@ smr_multi_cmd(){
 
 ##### eqtl ananlysis
 Westra_eqtl=${21} #{true, false}
-Westra_eqtl="true";
+#Westra_eqtl="true";
 if [[ "$Westra_eqtl" = "true" ]]; then
     smr_out="Westra";
     smr_cmd westra_eqtl_hg19 ${smr_out};
@@ -202,7 +202,7 @@ if [[ "$Westra_eqtl" = "true" ]]; then
 fi
 
 CAGE_eqtl=${22} #{true, false}
-CAGE_eqtl="true";
+#CAGE_eqtl="true";
 if [[ "$CAGE_eqtl" = "true" ]]; then
     smr_out="CAGE";
     smr_cmd CAGE.sparse ${smr_out};
@@ -266,7 +266,7 @@ GTEx_v8_tissue=${23};
 # Vagina
 # Whole_Blood
 
-GTEx_v8_tissue="Lung";
+#GTEx_v8_tissue="Lung";
 ##SMR GTEx 8
 if [[ "$GTEx_v8_tissue" != "" ]]; then
 	smr_out=${GTEx_v8_tissue};
