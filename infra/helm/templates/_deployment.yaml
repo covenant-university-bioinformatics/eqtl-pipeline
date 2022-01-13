@@ -1,0 +1,258 @@
+{{- define "deployment" -}}
+{{- if not .Values.ingress.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "microservice.fullname" . }}
+  namespace: {{ .Values.namespace }}
+  {{- if .Values.annotations }}
+  annotations:
+  {{- range $key, $value := .Values.annotations }}
+    {{ $key }}: {{ $value }}
+  {{- end }}
+  {{- end }}
+  labels:
+    app.kubernetes.io/name: {{ include "microservice.name" . }}
+    helm.sh/chart: {{ include "microservice.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount | default .Values.global.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "microservice.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "microservice.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecrets }}
+      {{- end }}
+      {{- if .Values.serviceAccount }}
+      serviceAccountName: {{ .Values.serviceAccount }}
+      {{- end }}
+      {{- if .Values.hostAliases }}
+      hostAliases:
+      {{- range .Values.hostAliases }}
+      - ip: {{ .ip }}
+        hostnames:
+        {{- range .hostnames }}
+        - {{ . }}
+        {{- end }}
+      {{- end }}
+      {{- end }}
+      containers:
+        - name: {{ .Release.Name }}
+          image: {{ .Values.image }}
+          imagePullPolicy: {{ .Values.imageConfig.pullPolicy }}
+          {{- if .Values.command }}
+          command: {{ .Values.command }}
+          {{- end }}
+          {{- if .Values.args }}
+          args: [ {{- range .Values.args }}{{ cat ( . | quote ) ","  }}{{- end }} ]
+          {{- end }}
+          ports:
+            {{- with first .Values.services -}}
+            {{- range $port:= .specs}}
+            - name: {{ .name }}
+              containerPort: {{ .targetPort | default .port}}
+              protocol: {{ .protocol | default "TCP" }}
+            {{- end }}
+            {{- end }}
+          {{- if not ( empty .Values.environment) }}
+          env:
+            {{- range .Values.environment }}
+            - name: {{ .name }}
+              {{- if .value }}
+              value: {{ .value }}
+              {{- else if .valueFrom }}
+              valueFrom:
+                {{- if .valueFrom.secretKeyRef }}
+                secretKeyRef:
+                  name: {{ .valueFrom.secretKeyRef.name }}
+                  key: {{ .valueFrom.secretKeyRef.key }}
+                {{- else if .valueFrom.configMapKeyRef }}
+                configMapKeyRef:
+                  name: {{ .valueFrom.configMapKeyRef.name }}
+                  key: {{ .valueFrom.configMapKeyRef.key }}
+                {{- else }}
+                fieldRef:
+                  fieldPath: metadata.name
+                {{- end }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.volumes.enabled }}
+          volumeMounts:
+            {{- if .Values.volumes.configMaps }}
+            {{- range $conf := .Values.volumes.configMaps }}
+            - mountPath: {{ $conf.mountPath }}
+              name: {{ $conf.name }}-volume
+            {{- end }}
+            {{- end }}
+            {{- if .Values.fileConfigMap }}
+            {{- range .Values.fileConfigMap }}
+            - mountPath: {{ .mountPath }}
+              name: {{ .volumeName }}-volume
+            {{- end }}
+            {{- end }}
+            {{- if .Values.volumes.pvc.enabled }}
+            {{- if .Values.volumes.pvc.name }}
+            - mountPath: {{ .Values.volumes.pvc.mountPath }}
+              name: {{ .Values.volumes.pvc.name }}-volume
+            {{- else }}
+            - mountPath: {{ .Values.volumes.pvc.mountPath }}
+              name: {{ .Values.volumes.pvc.existing_claim }}-volume
+            {{- end }}
+            {{- end }}
+            {{- if .Values.volumes.internal.enabled }}
+            {{- range $hpath := .Values.volumes.internal.hostpath }}
+            - mountPath: {{ $hpath.mountPath }}
+              name: {{ $hpath.name }}-volume
+            {{- end }}
+            {{- end }}
+            {{- if .Values.volumes.network.enabled }}
+            {{- range $hpath := .Values.volumes.network.nfs }}
+            - mountPath: {{ $hpath.mountPath }}
+              name: {{ $hpath.name }}-volume
+            {{- end }}
+            {{- end }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- if .Values.enableInitContainers }}
+      {{- with $cont := .Values.initContainers }}
+      initContainers:
+        - name: {{ $cont.init.name }}
+          image: {{ $cont.init.image }}
+          {{- if not ( empty $cont.init.env ) }}
+          env:
+            {{- range $cont.init.env }}
+            - name: {{ .name }}
+              {{- if .value }}
+              value: {{ .value }}
+              {{- else if .valueFrom }}
+              valueFrom:
+                {{- if .valueFrom.secretKeyRef }}
+                secretKeyRef:
+                  name: {{ .valueFrom.secretKeyRef.name }}
+                  key: {{ .valueFrom.secretKeyRef.key }}
+                {{- else if .valueFrom.configMapKeyRef }}
+                configMapKeyRef:
+                  name: {{ .valueFrom.configMapKeyRef.name }}
+                  key: {{ .valueFrom.configMapKeyRef.key }}
+                {{- else }}
+                fieldRef:
+                  fieldPath: metadata.name
+              {{- end }}
+            {{- end }}
+          {{- end }}
+          {{- end }}
+          command:
+          {{- range $arg := $cont.init.command }}
+            - {{ $arg | quote }}
+          {{- end }}
+          args:
+            {{- range $arg := $cont.init.args }}
+            - {{ $arg | quote }}
+            {{- end }}
+          volumeMounts:
+            {{- if $.Values.fileConfigMap }}
+            {{- range $.Values.fileConfigMap }}
+            - mountPath: {{ .mountPath }}
+              name: {{ .volumeName }}-volume
+          {{- end }}
+          {{- end }}
+        {{- if $.Values.initContainers.createdb }}
+        - name: {{ $cont.createdb.name }}
+          image: {{ $cont.createdb.image }}
+          {{- if not ( empty $cont.createdb.env ) }}
+          env:
+            {{- range $cont.createdb.env }}
+            - name: {{ .name }}
+              {{- if .value }}
+              value: {{ .value }}
+              {{- else if .valueFrom }}
+              valueFrom:
+                {{- if .valueFrom.secretKeyRef }}
+                secretKeyRef:
+                  name: {{ .valueFrom.secretKeyRef.name }}
+                  key: {{ .valueFrom.secretKeyRef.key }}
+                {{- else if .valueFrom.configMapKeyRef }}
+                configMapKeyRef:
+                  name: {{ .valueFrom.configMapKeyRef.name }}
+                  key: {{ .valueFrom.configMapKeyRef.key }}
+                {{- else }}
+                fieldRef:
+                  fieldPath: metadata.name
+              {{- end }}
+          {{- end }}
+          {{- end }}
+          {{- end }}
+          command:
+            {{- range $arg := $cont.createdb.command }}
+            - {{ $arg | quote }}
+          {{- end }}
+          args:
+            {{- range $arg := $cont.createdb.args }}
+            - {{ $arg | quote }}
+              {{- end }}
+          volumeMounts:
+            {{- if $.Values.fileConfigMap }}
+            {{- range $.Values.fileConfigMap }}
+            - mountPath: {{ .mountPath }}
+              name: {{ .volumeName }}-volume
+            {{- end }}
+        {{- end }}
+      {{- end }}
+      {{- end }}
+      {{- end }}
+      {{- if .Values.volumes.enabled }}
+      volumes:
+        {{- if .Values.volumes.configMaps }}
+        {{- range $conf := .Values.volumes.configMaps }}
+        - name: {{ $conf.name }}-volume
+          configMap:
+            name: {{ $conf.name }}
+       {{- end }}
+       {{- end }}
+       {{- if .Values.volumes.pvc.enabled}}
+       {{- if .Values.volumes.pvc.name}}
+        - name: {{ .Values.volumes.pvc.name }}-volume
+          persistentVolumeClaim:
+            claimName: {{ .Values.volumes.pvc.name }}
+       {{- else }}
+        - name: {{ .Values.volumes.pvc.existing_claim }}-volume
+          persistentVolumeClaim:
+            claimName: {{ .Values.volumes.pvc.existing_claim }}
+       {{- end }}
+       {{- end }}
+       {{- if .Values.volumes.internal.enabled}}
+       {{- range $hpath := .Values.volumes.internal.hostpath }}
+        - name: {{ $hpath.name }}-volume
+          hostPath:
+            path: {{ $hpath.path }}
+       {{- end }}
+       {{- end }}
+       {{- if .Values.volumes.network.enabled }}
+       {{- range $hpath := .Values.volumes.network.nfs }}
+        - name: {{ $hpath.name }}-volume
+          nfs:
+            path: {{ $hpath.path }}
+            server: {{ $hpath.server }}
+       {{- end }}
+       {{- end }}
+       {{- if .Values.fileConfigMap }}
+       {{- range .Values.fileConfigMap }}
+        - name: {{ .volumeName }}-volume
+          configMap:
+            name: {{ .name }}
+      {{- end }}
+      {{- end }}
+      {{- end }}
+{{- end -}}
+{{- end -}}

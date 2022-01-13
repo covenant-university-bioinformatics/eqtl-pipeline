@@ -1,0 +1,29 @@
+apiVersion: skaffold/v2beta6
+kind: Config
+deploy:
+  helm:
+    releases:
+      - name: pathwaybased
+        chartPath: .\infra\helm\
+        valuesFiles:
+          - .\infra\helm\values.yaml
+        artifactOverrides:
+          image: cubrenig/pgwaspathwaybased
+
+build:
+  local:
+    push: false
+    concurrency: 5
+  artifacts:
+    - image: cubrenig/pgwaspathwaybased
+      context: app
+      docker:
+        dockerfile: Dockerfile.dev
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
+          - src: "**/*.R"
+            dest: .
+          - src: "**/*.sh"
+            dest: .

@@ -1,0 +1,19 @@
+{{- define "dbconfigmap"  -}}
+{{- $root:= . }}
+{{- if .Values.dbConfigMap }}
+{{ $name := $.Release.Name }}
+{{ $service := (first .Values.services) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+  namespace: {{ .Values.app.namespace }}
+  {{- template "cfgannots" }}
+data:
+  {{- if contains "mongo" .Release.Name }}
+  database_url: {{ include "microservice.fullname" . }}-svc-{{ $service.name }}.{{ .Values.namespace }}
+  {{- else }}
+  database_url: {{ include "microservice.fullname" $root }}-svc-{{ $service.name }}.{{ .Values.namespace }}
+  {{- end}}
+{{- end }}
+{{- end }}

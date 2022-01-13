@@ -1,0 +1,14 @@
+{{- define "redisconfigmap"  -}}
+{{- if .Values.redisConfigMap }}
+{{ $name := $.Release.Name }}
+{{ $service := (first .Values.services) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+  namespace: {{ .Values.namespace }}
+  {{- template "cfgannots" }}
+data:
+    redis_host: {{ include "microservice.fullname" . }}-svc-{{ $service.name }}
+{{- end }}
+{{- end }}
