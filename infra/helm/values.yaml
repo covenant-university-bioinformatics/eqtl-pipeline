@@ -1,0 +1,155 @@
+---
+# Default values for microservice.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+global:
+  replicaCount: 1
+  environment:
+  # list of key: value
+  # GLOBAL1: value
+
+## Set default image, imageTag, and imagePullPolicy.
+## ref: https://hub.docker.com/r/apache/nifi/
+##
+
+image: skafoldcfg
+imageConfig:
+  repository:
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+#command: ['echo pre-install Job Pod is Running']
+
+replicaCount: 1
+
+# command: ["/bin/sh","-c"]
+# args: ["echo 'consuming a message'; sleep 5"]
+
+nameOverride: deployment
+fullnameOverride: ""
+namespace: apps
+# Annotation for the Deployment
+annotations: {}
+
+#ARGS: both works
+
+# List of services
+services:
+  - name: web
+    type: ClusterIP
+    annotations: {}
+    specs:
+      - port: 3000
+        targetPort: 3000
+        name: port-svc
+
+#targetPort: is the port the container accepts traffic on,
+#port: is the abstracted Service port, which can be any port other pods use to access the Service
+#https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.16/#serviceport-v1-core
+
+environment:
+  - name: NATS_URL
+    valueFrom:
+      configMapKeyRef:
+        name: nats-configmap
+        key: nats_url
+  - name: NATS_CLUSTER_ID
+    value: pgwas-internal
+  - name: NATS_CLIENT_ID
+    valueFrom:
+      fieldRef: metadata.name
+  - name: JWT_KEY
+    valueFrom:
+      secretKeyRef:
+        name: jwt-secret
+        key: JWT_KEY
+  - name: REDIS_BULL_HOST
+    valueFrom:
+      configMapKeyRef:
+        name: redis-bullmq-configmap
+        key: database_url
+  - name: MONGO_HOST
+    valueFrom:
+      configMapKeyRef:
+        name: pgwasmongo-configmap
+        key: database_url
+  - name: MONGODB_USER
+    valueFrom:
+      secretKeyRef:
+        name: mongo-secret
+        key: mongo-root-username
+  - name: MONGODB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: mongo-secret
+        key: mongo-root-password
+  - name: MONGODB_NAME
+    valueFrom:
+      secretKeyRef:
+        name: mongo-secret
+        key: mongo-pathwaybased-db
+  - name: MONGODB_PODNAME
+    value: pgwas-mongo
+
+dbConfigMap: false
+eventConfigMap: false
+redisConfigMap: false
+
+volumes:
+  enabled: true
+  pvc:
+    enabled: true
+    name:
+    existing_claim: analysis-storage
+    mountPath: /pv/analysis
+    size: 20Gi
+    class: hostpath
+    accessModes:
+      - ReadWriteMany
+  internal:
+    enabled: true
+    hostpath:
+      - name: humandb
+        path: /run/desktop/mnt/host/d/PASCAL
+        mountPath: /local/datasets/pathwaybased
+      - name: testfiles
+        path: /run/desktop/mnt/host/c/Users/daref/Documents/NodeBackend/pgwas_test_files
+        mountPath: /local/datasets/data
+  network:
+    enabled: false
+    nfs:
+      - name: nfspgwas
+        server: 207.154.231.244
+        path: /mnt/volume_fra1_03
+        mountPath: /local/datasets
+
+#  configMaps:
+#    - name: sqlfile
+#      mountPath: /data/sqls
+#      data:
+#        test.conf: |
+#          hello
+
+fileConfigMap:
+#  - name: sqlfile
+#    volumeName: db
+#    mountPath: /data/sqls
+
+## Configure Ingress based on the documentation here: https://kubernetes.io/docs/concepts/services-networking/ingress/
+##
+ingress:
+  enabled: false
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+#  limits:
+#    cpu: 2
+#    memory: 4000Mi
+#  requests:
+#    cpu: 2000m
+#    memory: 4000Mi
+
+enableInitContainers: false

@@ -1,0 +1,4 @@
+{{- include "configmap" . -}}
+{{- include "dbconfigmap" . -}}
+{{- include "evtconfigmap" . -}}
+{{- include "redisconfigmap" . -}}

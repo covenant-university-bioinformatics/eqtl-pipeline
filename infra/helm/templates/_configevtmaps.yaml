@@ -1,0 +1,14 @@
+{{- define "evtconfigmap"  -}}
+{{- if .Values.eventConfigMap }}
+{{ $name := $.Release.Name }}
+{{ $service := (first .Values.services) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-configmap
+  namespace: {{ .Values.namespace }}
+  {{- template "cfgannots" }}
+data:
+  nats_url: http://{{ include "microservice.fullname" . }}-svc-{{ $service.name }}:4222
+{{- end }}
+{{- end }}

@@ -1,0 +1,36 @@
+FROM node:16-alpine
+
+ENV CI=true
+
+WORKDIR /app
+
+COPY package.json ./
+
+#COPY yarn.lock ./
+
+#RUN yarn add @nestjs/cli
+
+RUN npm install
+
+COPY ./ ./
+
+#add bash
+RUN apk add --no-cache bash
+
+#install Java and packages
+#RUN apt-get update && \
+#    apt-get install -y openjdk-11-jdk && \
+#    apt-get clean;
+
+RUN apk --no-cache add openjdk11
+
+
+#remove windows line endings
+#RUN apt-get install dos2unix
+RUN apk add dos2unix
+RUN dos2unix pipeline_scripts/pascal.sh
+RUN chmod 775 pipeline_scripts/pascal.sh
+
+
+#RUN yarn run build
+CMD [ "npm", "run", "start:dev" ]

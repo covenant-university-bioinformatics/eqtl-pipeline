@@ -1,0 +1,12 @@
+{{- $root:= . -}}
+{{- if .Values.ingress.enabled -}}
+    {{ printf "%s-%s installed" (.Release.Name | title ) .Values.nameOverride }}
+{{- else }}
+{{- with $service:= first .Values.services -}}
+    Microservice deployed.
+    Proxy command for reaching the services:
+    {{- range $spec:= .specs }}
+        kubectl port-forward svc/{{ include "microservice.fullname" $root }}-svc-{{ $service.name }}  {{ $spec.containerPort | default $spec.port }}:{{ $spec.port }}
+    {{- end }}
+{{- end }}
+{{- end }}
