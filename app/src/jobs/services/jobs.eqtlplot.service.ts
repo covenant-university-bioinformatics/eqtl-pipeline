@@ -22,10 +22,11 @@ import { validateInputs } from './service.util';
 import { EqtlPlotJobQueue } from '../../jobqueue/queue/eqtlplot.queue';
 
 //production
-// const testPath = '/local/datasets/pgwas_test_files/pascal/uk_split.txt';
+const testPath =
+  '/local/datasets/pgwas_test_files/eqtl/UKB_bv_height_SMR_0.05.txt';
 //development
 // const testPath = '/local/datasets/data/eqtl/UKB_small.txt';
-const testPath = '/local/datasets/data/eqtl/UKB_bv_height_SMR_0.05.txt';
+// const testPath = '/local/datasets/data/eqtl/UKB_bv_height_SMR_0.05.txt';
 @Injectable()
 export class JobsEqtlPlotService {
   constructor(
