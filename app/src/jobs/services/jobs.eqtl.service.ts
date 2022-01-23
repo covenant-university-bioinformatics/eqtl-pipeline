@@ -4,11 +4,8 @@ import {
   ForbiddenException,
   Inject,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import * as fs from 'fs';
-import { v4 as uuidv4 } from 'uuid';
 import { CreateJobDto } from '../dto/create-job.dto';
 import { EqtlJobsModel, JobStatus } from '../models/eqtl.jobs.model';
 import { EqtlModel, OnOffOptions } from '../models/eqtl.model';
@@ -16,7 +13,6 @@ import { EqtlJobQueue } from '../../jobqueue/queue/eqtl.queue';
 import { UserDoc } from '../../auth/models/user.model';
 import { GetJobsDto } from '../dto/getjobs.dto';
 import {
-  fileOrPathExists,
   findAllJobs,
   removeManyUserJobs,
   removeUserJob,
@@ -26,9 +22,11 @@ import {
 import { validateInputs } from './service.util';
 
 //production
-const testPath = '/local/datasets/pgwas_test_files/pascal/uk_split.txt';
+const testPath =
+  '/local/datasets/pgwas_test_files/eqtl/UKB_bv_height_SMR_0.05.txt';
 //development
-// const testPath = '/local/datasets/data/pascal/uk_split.txt';
+// const testPath = '/local/datasets/data/eqtl/UKB_small.txt';
+// const testPath = '/local/datasets/data/eqtl/UKB_bv_height_SMR_0.05.txt';
 
 @Injectable()
 export class JobsEqtlService {
@@ -73,7 +71,7 @@ export class JobsEqtlService {
 
       if (createJobDto.useTest === 'false') {
         deleteFileorFolder(file.path).then(() => {
-          console.log('deleted');
+          // console.log('deleted');
         });
       }
 
@@ -81,7 +79,15 @@ export class JobsEqtlService {
       const heidi = createJobDto.heidi === OnOffOptions.ON;
       const trans = createJobDto.trans === OnOffOptions.ON;
       const smr_multi = createJobDto.smr_multi === OnOffOptions.ON;
-      const longJob = totalLines > 100000 || (heidi && trans) || smr_multi;
+      const westra = createJobDto.Westra_eqtl === 'true';
+      const cage = createJobDto.CAGE_eqtl === 'true';
+      const tissue = !!createJobDto.Westra_eqtl;
+
+      const longJob =
+        totalLines > 100000 ||
+        (heidi && trans) ||
+        smr_multi ||
+        (westra && cage && tissue);
 
       //save job parameters, folder path, filename in database
       let newJob;

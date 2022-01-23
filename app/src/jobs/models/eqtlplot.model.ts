@@ -139,7 +139,7 @@ const EqtlPlotSchema = new mongoose.Schema<EqtlPlotDoc, EqtlModel>(
     },
     eqtl_summary: {
       type: String,
-      enum: [Object.values(EqtlOptions)],
+      enum: [...Object.values(EqtlOptions)],
       trim: true,
       default: EqtlOptions.WESTRA,
     },

@@ -71,8 +71,6 @@ export enum TISSUEOptions {
   Whole_Blood = 'Whole_Blood',
 }
 
-console.log(Object.values(TISSUEOptions));
-
 //Interface that describe the properties that are required to create a new job
 interface EqtlAttrs {
   job: string;

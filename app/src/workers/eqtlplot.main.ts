@@ -6,6 +6,7 @@ import { JobStatus, EqtlJobsModel } from '../jobs/models/eqtl.jobs.model';
 import * as path from 'path';
 import { EqtlPlotModel } from '../jobs/models/eqtlplot.model';
 import { JobCompletedPublisher } from '../nats/publishers/job-completed-publisher';
+import { EqtlPlotJobsModel } from '../jobs/models/eqtlplot.jobs.model';
 
 let scheduler;
 
@@ -38,18 +39,18 @@ export const createEqtlPlotWorkers = async (
 
       // save in mongo database
       // job is complete
-      const parameters = await EqtlPlotModel.findOne({
-        job: job.data.jobId,
-      }).exec();
+      // const parameters = await EqtlPlotModel.findOne({
+      //   job: job.data.jobId,
+      // }).exec();
 
       const pathToOutputDir = `/pv/analysis/${job.data.jobUID}/${appConfig.appNamePlot}/output`;
 
       //update db with result files
-      const finishedJob = await EqtlJobsModel.findByIdAndUpdate(
+      const finishedJob = await EqtlPlotJobsModel.findByIdAndUpdate(
         job.data.jobId,
         {
           status: JobStatus.COMPLETED,
-          EffectSizePlot: `${pathToOutputDir}//Effect_sizes.png`,
+          EffectSizePlot: `${pathToOutputDir}/Effect_sizes.png`,
           LocusPlot: `${pathToOutputDir}/LocusPlot.png`,
           completionTime: new Date(),
         },
@@ -79,7 +80,7 @@ export const createEqtlPlotWorkers = async (
       console.log('worker ' + i + ' failed ' + job.failedReason);
       //update job in database as failed
       //save in mongo database
-      const finishedJob = await EqtlJobsModel.findByIdAndUpdate(
+      const finishedJob = await EqtlPlotJobsModel.findByIdAndUpdate(
         job.data.jobId,
         {
           status: JobStatus.FAILED,

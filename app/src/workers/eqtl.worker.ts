@@ -63,7 +63,7 @@ export default async (job: SandboxedJob) => {
   const pathToOutputDir = `/pv/analysis/${job.data.jobUID}/${appConfig.appName}/output`;
   const jobParameters = getJobParameters(parameters);
   jobParameters.unshift(pathToInputFile, pathToOutputDir);
-  // console.log(jobParameters);
+
   console.log(jobParameters);
   //make output directory
   fs.mkdirSync(pathToOutputDir, { recursive: true });
@@ -82,7 +82,7 @@ export default async (job: SandboxedJob) => {
     // './pipeline_scripts/pascal.sh &>/dev/null',
     './pipeline_scripts/smr.sh',
     jobParameters,
-    { maxBuffer: 1024 * 1024 * 10 },
+    { maxBuffer: 1024 * 1024 * 1024 },
   );
 
   console.log('Spawn command log');
@@ -92,13 +92,13 @@ export default async (job: SandboxedJob) => {
   const error_msg = jobSpawn?.stderr?.toString();
   console.log(error_msg);
 
-  let cageSMR = false;
-  let cageSMRManhattan = false;
-  let cageSMRQQ = false;
-  let cageSMRTrans = false;
-  let cageSMRMulti = false;
-  let cageSMRMultiManhattan = false;
-  let cageSMRMultiQQ = false;
+  let cageSMR = true;
+  let cageSMRManhattan = true;
+  let cageSMRQQ = true;
+  let cageSMRTrans = true;
+  let cageSMRMulti = true;
+  let cageSMRMultiManhattan = true;
+  let cageSMRMultiQQ = true;
 
   if (parameters.CAGE_eqtl === 'true') {
     cageSMR = await fileOrPathExists(`${pathToOutputDir}/CAGE.smr`);
@@ -124,13 +124,13 @@ export default async (job: SandboxedJob) => {
     }
   }
 
-  let westraSMR = false;
-  let westraSMRManhattan = false;
-  let westraSMRQQ = false;
-  let westraSMRTrans = false;
-  let westraSMRMulti = false;
-  let westraSMRMultiManhattan = false;
-  let westraSMRMultiQQ = false;
+  let westraSMR = true;
+  let westraSMRManhattan = true;
+  let westraSMRQQ = true;
+  let westraSMRTrans = true;
+  let westraSMRMulti = true;
+  let westraSMRMultiManhattan = true;
+  let westraSMRMultiQQ = true;
 
   if (parameters.Westra_eqtl === 'true') {
     westraSMR = await fileOrPathExists(`${pathToOutputDir}/Westra.smr`);
@@ -156,13 +156,13 @@ export default async (job: SandboxedJob) => {
     }
   }
 
-  let tissueSMR = false;
-  let tissueSMRManhattan = false;
-  let tissueSMRQQ = false;
-  let tissueSMRTrans = false;
-  let tissueSMRMulti = false;
-  let tissueSMRMultiManhattan = false;
-  let tissueSMRMultiQQ = false;
+  let tissueSMR = true;
+  let tissueSMRManhattan = true;
+  let tissueSMRQQ = true;
+  let tissueSMRTrans = true;
+  let tissueSMRMulti = true;
+  let tissueSMRMultiManhattan = true;
+  let tissueSMRMultiQQ = true;
 
   if (parameters.GTEx_v8_tissue) {
     tissueSMR = await fileOrPathExists(
@@ -215,6 +215,8 @@ export default async (job: SandboxedJob) => {
     tissueSMRMultiManhattan,
     tissueSMRMultiQQ,
   ];
+
+  console.log(resultSuccessful);
 
   const answer = resultSuccessful.some((element) => element === false);
 

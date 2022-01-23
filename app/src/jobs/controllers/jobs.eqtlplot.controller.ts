@@ -14,12 +14,12 @@ import {
 import * as multer from 'multer';
 import * as fs from 'fs';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { JobsEqtlService } from '../services/jobs.eqtl.service';
-import { CreateJobDto } from '../dto/create-job.dto';
 import { getFileOutput } from '@cubrepgwas/pgwascommon';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../../decorators/get-user.decorator';
 import { GetJobsDto } from '../dto/getjobs.dto';
+import { CreateEqtlPlotJobDto } from '../dto/create-eqtlplot-job.dto';
+import { JobsEqtlPlotService } from '../services/jobs.eqtlplot.service';
 
 const storageOpts = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -36,12 +36,12 @@ const storageOpts = multer.diskStorage({
 @UseGuards(AuthGuard())
 @Controller('api/eqtlplot/jobs')
 export class JobsEqtlPlotController {
-  constructor(private readonly jobsService: JobsEqtlService) {}
+  constructor(private readonly jobsService: JobsEqtlPlotService) {}
 
   @Post()
   @UseInterceptors(FileInterceptor('file', { storage: storageOpts }))
   async create(
-    @Body(ValidationPipe) createJobDto: CreateJobDto,
+    @Body(ValidationPipe) createJobDto: CreateEqtlPlotJobDto,
     @UploadedFile() file: Express.Multer.File,
     @GetUser() user,
   ) {

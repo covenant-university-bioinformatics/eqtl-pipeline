@@ -12,10 +12,10 @@ import {
 import * as multer from 'multer';
 import * as fs from 'fs';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { JobsEqtlService } from '../services/jobs.eqtl.service';
-import { CreateJobDto } from '../dto/create-job.dto';
 import { getFileOutput } from '@cubrepgwas/pgwascommon';
 import { GetUser } from '../../decorators/get-user.decorator';
+import { JobsEqtlPlotService } from '../services/jobs.eqtlplot.service';
+import { CreateEqtlPlotJobDto } from '../dto/create-eqtlplot-job.dto';
 
 const storageOpts = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -31,12 +31,12 @@ const storageOpts = multer.diskStorage({
 
 @Controller('api/eqtlplot/noauth/jobs')
 export class JobsEqtlPlotNoAuthController {
-  constructor(private readonly jobsService: JobsEqtlService) {}
+  constructor(private readonly jobsService: JobsEqtlPlotService) {}
 
   @Post()
   @UseInterceptors(FileInterceptor('file', { storage: storageOpts }))
   async create(
-    @Body(ValidationPipe) createJobDto: CreateJobDto,
+    @Body(ValidationPipe) createJobDto: CreateEqtlPlotJobDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
     //call service

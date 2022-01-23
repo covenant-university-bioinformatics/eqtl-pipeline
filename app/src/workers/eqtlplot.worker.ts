@@ -64,7 +64,7 @@ export default async (job: SandboxedJob) => {
   const pathToOutputDir = `/pv/analysis/${job.data.jobUID}/${appConfig.appNamePlot}/output`;
   const jobParameters = getJobParameters(parameters);
   jobParameters.unshift(pathToInputFile, pathToOutputDir);
-  // console.log(jobParameters);
+
   console.log(jobParameters);
   //make output directory
   fs.mkdirSync(pathToOutputDir, { recursive: true });
@@ -83,7 +83,7 @@ export default async (job: SandboxedJob) => {
     // './pipeline_scripts/pascal.sh &>/dev/null',
     './pipeline_scripts/smr_plot.sh',
     jobParameters,
-    { maxBuffer: 1024 * 1024 * 10 },
+    { maxBuffer: 1024 * 1024 * 1024 },
   );
 
   console.log('Spawn command log');

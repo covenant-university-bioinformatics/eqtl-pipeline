@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:16
 
 ENV CI=true
 
@@ -6,31 +6,27 @@ WORKDIR /app
 
 COPY package.json ./
 
-#COPY yarn.lock ./
-
-#RUN yarn add @nestjs/cli
-
 RUN npm install
 
 COPY ./ ./
 
-#add bash
-RUN apk add --no-cache bash
+#install R and packages
+#RUN add-apt-repository universe multiverse
+RUN apt update
 
-#install Java and packages
-#RUN apt-get update && \
-#    apt-get install -y openjdk-11-jdk && \
-#    apt-get clean;
+RUN apt-get install -y r-base
+RUN apt-get install -y -qq r-cran-teachingdemos
+RUN apt-get install -y -qq r-cran-qqman
 
-RUN apk --no-cache add openjdk11
-
+#RUN R -e "install.packages(c('TeachingDemos'),dependencies=TRUE,repos='http://cran.rstudio.com/')"
 
 #remove windows line endings
-#RUN apt-get install dos2unix
-RUN apk add dos2unix
-RUN dos2unix pipeline_scripts/pascal.sh
-RUN chmod 775 pipeline_scripts/pascal.sh
+RUN apt-get install dos2unix
+RUN dos2unix pipeline_scripts/smr.sh
+RUN chmod 775 pipeline_scripts/smr.sh
 
+RUN dos2unix pipeline_scripts/smr_plot.sh
+RUN chmod 775 pipeline_scripts/smr_plot.sh
 
 #RUN yarn run build
 CMD [ "npm", "run", "start:dev" ]
