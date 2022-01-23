@@ -88,7 +88,7 @@ environment:
     valueFrom:
       secretKeyRef:
         name: mongo-secret
-        key: mongo-pathwaybased-db
+        key: mongo-eqtl-db
   - name: MONGODB_PODNAME
     value: pgwas-mongo
 
@@ -111,8 +111,8 @@ volumes:
     enabled: true
     hostpath:
       - name: humandb
-        path: /run/desktop/mnt/host/d/PASCAL
-        mountPath: /local/datasets/pathwaybased
+        path: /run/desktop/mnt/host/d/eqtl
+        mountPath: /local/datasets/eqtl
       - name: testfiles
         path: /run/desktop/mnt/host/c/Users/daref/Documents/NodeBackend/pgwas_test_files
         mountPath: /local/datasets/data

@@ -1,32 +1,31 @@
-FROM node:16-alpine
+FROM node:16
 
 ENV CI=true
 
-
 WORKDIR /app
-
 
 COPY package.json ./
 
-
 RUN npm install
-
 
 COPY ./ ./
 
+#install R and packages
+RUN apt update
 
-#add bash
-RUN apk add --no-cache bash
+RUN apt-get install -y r-base
+RUN apt-get install -y -qq r-cran-teachingdemos
+RUN apt-get install -y -qq r-cran-qqman
 
-
-#install Java and packages
-RUN apk --no-cache add openjdk11
-
+#RUN R -e "install.packages(c('TeachingDemos'),dependencies=TRUE,repos='http://cran.rstudio.com/')"
 
 #remove windows line endings
-RUN apk add dos2unix
-RUN dos2unix pipeline_scripts/pascal.sh
-RUN chmod 775 pipeline_scripts/pascal.sh
+RUN apt-get install dos2unix
+RUN dos2unix pipeline_scripts/smr.sh
+RUN chmod 775 pipeline_scripts/smr.sh
+
+RUN dos2unix pipeline_scripts/smr_plot.sh
+RUN chmod 775 pipeline_scripts/smr_plot.sh
 
 
 RUN npm run build

@@ -6,7 +6,7 @@ import { CreateEqtlPlotJobDto } from '../dto/create-eqtlplot-job.dto';
 import { UserDoc } from '../../auth/models/user.model';
 import { CreateJobDto } from '../dto/create-job.dto';
 import { fileOrPathExists } from '@cubrepgwas/pgwascommon';
-import fs from 'fs';
+import * as fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 
 export const validateInputs = async (

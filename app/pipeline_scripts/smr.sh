@@ -15,7 +15,10 @@
 
 #### Input gwas_summary format
 #SNP    A1  A2  freq    b   se  p   n
-bindir='/mnt/d/eqtl'
+#production
+bindir='/local/datasets/eqtl'
+#development
+#bindir='/local/datasets/eqtl'
 db="$bindir";
 
 gwas_summary=$1;

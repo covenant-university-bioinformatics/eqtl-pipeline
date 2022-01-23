@@ -9,6 +9,7 @@ import * as mongoSanitize from 'express-mongo-sanitize';
 import * as xss from 'xss-clean';
 import * as rateLimit from 'express-rate-limit';
 import * as hpp from 'hpp';
+import appConfig from './config/app.config';
 
 async function bootstrap() {
   // await connectDB();
@@ -29,7 +30,14 @@ async function bootstrap() {
   app.use(hpp());
   app.use(helmet());
   app.use(compression());
-  app.use('/api/genebased/pv/analysis', express.static('/pv/analysis'));
+  app.use(
+    `/api/${appConfig.appName}/pv/analysis`,
+    express.static('/pv/analysis'),
+  );
+  app.use(
+    `/api/${appConfig.appNamePlot}/pv/analysis`,
+    express.static('/pv/analysis'),
+  );
 
   await app.listen(3000);
 }

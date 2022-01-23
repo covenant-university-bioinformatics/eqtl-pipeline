@@ -3,19 +3,19 @@ kind: Config
 deploy:
   helm:
     releases:
-      - name: pathwaybased
+      - name: eqtl
         chartPath: .\infra\helm\
         valuesFiles:
           - .\infra\helm\values.yaml
         artifactOverrides:
-          image: cubrenig/pgwaspathwaybased
+          image: cubrenig/eqtl-pipeline
 
 build:
   local:
     push: false
     concurrency: 5
   artifacts:
-    - image: cubrenig/pgwaspathwaybased
+    - image: cubrenig/eqtl-pipeline
       context: app
       docker:
         dockerfile: Dockerfile.dev

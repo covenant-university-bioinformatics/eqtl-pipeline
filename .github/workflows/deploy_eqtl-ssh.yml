@@ -1,0 +1,42 @@
+name: deploy-eqtl
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd app && docker build -t cubrenig/pgwaseqtl:latest -t cubrenig/pgwaseqtl:$GITHUB_SHA .
+      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker push cubrenig/pgwaseqtl:latest
+      - run: docker push cubrenig/pgwaseqtl:$GITHUB_SHA
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: 'placeholder to avoid errors'
+#          known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
+      - name: Adding Known Hosts
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      - name: Copy files with rsync
+        run: rsync -avz ${{ github.workspace }}/ ${{ secrets.USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.HOME_DIR }}/files/dist/eqtl/
+      - name: run script commands via ssh
+        uses: appleboy/ssh-action@master
+        env:
+          SHA: ${{ github.sha }}
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          envs: SHA
+          script: |
+            echo $SHA > ${{ secrets.HOME_DIR }}/myfile.txt
+            helm upgrade eqtl ${{ secrets.HOME_DIR }}/files/dist/eqtl/infra/helm/ --install --wait --set image=cubrenig/pgwaseqtl:$SHA --values=${{ secrets.HOME_DIR }}/files/dist/eqtl/infra/helm/micro-values.yaml

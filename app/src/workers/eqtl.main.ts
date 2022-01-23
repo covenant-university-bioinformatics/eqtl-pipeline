@@ -161,7 +161,7 @@ export const createWorkers = async (
     });
 
     worker.on('failed', async (job: Job) => {
-      console.log('worker ' + i + ' failed ' + job.failedReason);
+      console.log('worker ' + i + ' failed');
       //update job in database as failed
       //save in mongo database
       const finishedJob = await EqtlJobsModel.findByIdAndUpdate(
