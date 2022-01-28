@@ -16,7 +16,7 @@ import {
   findAllJobs,
   removeManyUserJobs,
   removeUserJob,
-  writeEqtlFile,
+  fileSizeMb,
   deleteFileorFolder,
 } from '@cubrepgwas/pgwascommon';
 import { validateInputs } from './service.util';
@@ -40,7 +40,7 @@ export class JobsEqtlService {
     file: Express.Multer.File,
     user?: UserDoc,
   ) {
-    const { jobUID, filename } = await validateInputs(createJobDto, file, user);
+    const { jobUID } = await validateInputs(createJobDto, file, user);
 
     // console.log(createJobDto);
     console.log(jobUID);
@@ -57,24 +57,6 @@ export class JobsEqtlService {
 
       const filepath = createJobDto.useTest === 'true' ? testPath : file.path;
 
-      //write the exact columns needed by the analysis
-      const totalLines = writeEqtlFile(filepath, filename, {
-        marker_name: parseInt(createJobDto.marker_name, 10) - 1,
-        effect_allele: parseInt(createJobDto.effect_allele, 10) - 1,
-        alternate_allele: parseInt(createJobDto.alternate_allele, 10) - 1,
-        effect_allele_freq: parseInt(createJobDto.effect_allele_freq, 10) - 1,
-        beta: parseInt(createJobDto.beta, 10) - 1,
-        se: parseInt(createJobDto.se, 10) - 1,
-        p: parseInt(createJobDto.p_value, 10) - 1,
-        n: parseInt(createJobDto.sample_size, 10) - 1,
-      });
-
-      if (createJobDto.useTest === 'false') {
-        deleteFileorFolder(file.path).then(() => {
-          // console.log('deleted');
-        });
-      }
-
       //determine if it will be a long job
       const heidi = createJobDto.heidi === OnOffOptions.ON;
       const trans = createJobDto.trans === OnOffOptions.ON;
@@ -82,9 +64,10 @@ export class JobsEqtlService {
       const westra = createJobDto.Westra_eqtl === 'true';
       const cage = createJobDto.CAGE_eqtl === 'true';
       const tissue = !!createJobDto.Westra_eqtl;
+      const fileSize = await fileSizeMb(filepath);
 
       const longJob =
-        totalLines > 100000 ||
+        fileSize > 0.5 ||
         (heidi && trans) ||
         smr_multi ||
         (westra && cage && tissue);
@@ -96,7 +79,7 @@ export class JobsEqtlService {
         newJob = await EqtlJobsModel.build({
           job_name: createJobDto.job_name,
           jobUID,
-          inputFile: filename,
+          inputFile: filepath,
           status: JobStatus.QUEUED,
           user: user.id,
           longJob,
@@ -107,7 +90,7 @@ export class JobsEqtlService {
         newJob = await EqtlJobsModel.build({
           job_name: createJobDto.job_name,
           jobUID,
-          inputFile: filename,
+          inputFile: filepath,
           status: JobStatus.QUEUED,
           email: createJobDto.email,
           longJob,
@@ -189,7 +172,9 @@ export class JobsEqtlService {
     }
 
     if (job?.user?.username !== user.username) {
-      throw new ForbiddenException('Access not allowed');
+      throw new ForbiddenException(
+        'Access not allowed. Please sign in with correct credentials',
+      );
     }
 
     return job;
@@ -206,7 +191,9 @@ export class JobsEqtlService {
     }
 
     if (job?.user?.username) {
-      throw new ForbiddenException('Access not allowed');
+      throw new ForbiddenException(
+        'Access not allowed. Please sign in with correct credentials',
+      );
     }
 
     return job;

@@ -19,10 +19,10 @@ import { GetUser } from '../../decorators/get-user.decorator';
 
 const storageOpts = multer.diskStorage({
   destination: function (req, file, cb) {
-    if (!fs.existsSync('/tmp/summaryStats')) {
-      fs.mkdirSync('/tmp/summaryStats', { recursive: true });
+    if (!fs.existsSync('/local/datasets/temporary')) {
+      fs.mkdirSync('/local/datasets/temporary', { recursive: true });
     }
-    cb(null, '/tmp/summaryStats'); //destination
+    cb(null, '/local/datasets/temporary'); //destination
   },
   filename: function (req, file, cb) {
     cb(null, file.fieldname + '__' + file.originalname);

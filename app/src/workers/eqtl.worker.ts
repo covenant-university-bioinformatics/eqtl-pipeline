@@ -6,7 +6,11 @@ import appConfig from '../config/app.config';
 import { spawnSync } from 'child_process';
 import connectDB, { closeDB } from '../mongoose';
 
-import { fileOrPathExists } from '@cubrepgwas/pgwascommon';
+import {
+  deleteFileorFolder,
+  fileOrPathExists,
+  writeEqtlFile,
+} from '@cubrepgwas/pgwascommon';
 
 function sleep(ms) {
   console.log('sleeping');
@@ -56,10 +60,41 @@ export default async (job: SandboxedJob) => {
   const parameters = await EqtlModel.findOne({
     job: job.data.jobId,
   }).exec();
+
   const jobParams = await EqtlJobsModel.findById(job.data.jobId).exec();
 
+  //create input file and folder
+  let filename;
+
+  //extract file name
+  const name = jobParams.inputFile.split(/(\\|\/)/g).pop();
+
+  if (parameters.useTest === false) {
+    filename = `/pv/analysis/${jobParams.jobUID}/input/${name}`;
+  } else {
+    filename = `/pv/analysis/${jobParams.jobUID}/input/test.txt`;
+  }
+
+  //write the exact columns needed by the analysis
+  writeEqtlFile(jobParams.inputFile, filename, {
+    marker_name: parameters.marker_name - 1,
+    effect_allele: parameters.effect_allele - 1,
+    alternate_allele: parameters.alternate_allele - 1,
+    effect_allele_freq: parameters.effect_allele_freq - 1,
+    beta: parameters.beta - 1,
+    se: parameters.se - 1,
+    p: parameters.p_value - 1,
+    n: parameters.sample_size - 1,
+  });
+
+  if (parameters.useTest === false) {
+    deleteFileorFolder(jobParams.inputFile).then(() => {
+      // console.log('deleted');
+    });
+  }
+
   //assemble job parameters
-  const pathToInputFile = `${jobParams.inputFile}`;
+  const pathToInputFile = filename;
   const pathToOutputDir = `/pv/analysis/${job.data.jobUID}/${appConfig.appName}/output`;
   const jobParameters = getJobParameters(parameters);
   jobParameters.unshift(pathToInputFile, pathToOutputDir);
@@ -73,10 +108,12 @@ export default async (job: SandboxedJob) => {
     job.data.jobId,
     {
       status: JobStatus.RUNNING,
+      inputFile: filename,
     },
     { new: true },
   );
 
+  await sleep(3000);
   //spawn process
   const jobSpawn = spawnSync(
     // './pipeline_scripts/pascal.sh &>/dev/null',

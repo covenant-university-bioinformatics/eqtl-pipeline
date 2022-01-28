@@ -116,6 +116,9 @@ volumes:
       - name: testfiles
         path: /run/desktop/mnt/host/c/Users/daref/Documents/NodeBackend/pgwas_test_files
         mountPath: /local/datasets/data
+      - name: uploadfiles
+        path: /run/desktop/mnt/host/d/temporary
+        mountPath: /local/datasets/temporary
   network:
     enabled: false
     nfs:
