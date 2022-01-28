@@ -70,6 +70,15 @@ export enum EqtlOptions {
 //Interface that describe the properties that are required to create a new job
 interface EqtlPlotAttrs {
   job: string;
+  useTest: string;
+  marker_name: string;
+  effect_allele: string;
+  alternate_allele: string;
+  effect_allele_freq: string;
+  beta: string;
+  se: string;
+  p_value: string;
+  sample_size: string;
   population: Populations;
   eqtl_summary: EqtlOptions;
   probe: string;
@@ -102,6 +111,15 @@ interface EqtlModel extends mongoose.Model<EqtlPlotDoc> {
 export interface EqtlPlotDoc extends mongoose.Document {
   id: string;
   version: number;
+  useTest: boolean;
+  marker_name: number;
+  effect_allele: number;
+  alternate_allele: number;
+  effect_allele_freq: number;
+  beta: number;
+  se: number;
+  p_value: number;
+  sample_size: number;
   population: Populations;
   eqtl_summary: EqtlOptions;
   probe: string;
@@ -126,6 +144,42 @@ export interface EqtlPlotDoc extends mongoose.Document {
 
 const EqtlPlotSchema = new mongoose.Schema<EqtlPlotDoc, EqtlModel>(
   {
+    useTest: {
+      type: Boolean,
+      trim: true,
+    },
+    marker_name: {
+      type: Number,
+      trim: true,
+    },
+    effect_allele: {
+      type: Number,
+      trim: true,
+    },
+    alternate_allele: {
+      type: Number,
+      trim: true,
+    },
+    effect_allele_freq: {
+      type: Number,
+      trim: true,
+    },
+    beta: {
+      type: Number,
+      trim: true,
+    },
+    se: {
+      type: Number,
+      trim: true,
+    },
+    p_value: {
+      type: Number,
+      trim: true,
+    },
+    sample_size: {
+      type: Number,
+      trim: true,
+    },
     population: {
       type: String,
       enum: [

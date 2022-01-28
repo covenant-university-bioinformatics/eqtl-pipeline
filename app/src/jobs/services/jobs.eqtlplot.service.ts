@@ -17,6 +17,7 @@ import {
   removeUserJob,
   writeEqtlFile,
   deleteFileorFolder,
+  fileSizeMb,
 } from '@cubrepgwas/pgwascommon';
 import { validateInputs } from './service.util';
 import { EqtlPlotJobQueue } from '../../jobqueue/queue/eqtlplot.queue';
@@ -39,7 +40,7 @@ export class JobsEqtlPlotService {
     file: Express.Multer.File,
     user?: UserDoc,
   ) {
-    const { jobUID, filename } = await validateInputs(createJobDto, file, user);
+    const { jobUID } = await validateInputs(createJobDto, file, user);
 
     // console.log(createJobDto);
     console.log(jobUID);
@@ -56,26 +57,9 @@ export class JobsEqtlPlotService {
 
       const filepath = createJobDto.useTest === 'true' ? testPath : file.path;
 
-      //write the exact columns needed by the analysis
-      const totalLines = writeEqtlFile(filepath, filename, {
-        marker_name: parseInt(createJobDto.marker_name, 10) - 1,
-        effect_allele: parseInt(createJobDto.effect_allele, 10) - 1,
-        alternate_allele: parseInt(createJobDto.alternate_allele, 10) - 1,
-        effect_allele_freq: parseInt(createJobDto.effect_allele_freq, 10) - 1,
-        beta: parseInt(createJobDto.beta, 10) - 1,
-        se: parseInt(createJobDto.se, 10) - 1,
-        p: parseInt(createJobDto.p_value, 10) - 1,
-        n: parseInt(createJobDto.sample_size, 10) - 1,
-      });
-
-      if (createJobDto.useTest === 'false') {
-        deleteFileorFolder(file.path).then(() => {
-          console.log('deleted');
-        });
-      }
-
       //determine if it will be a long job
-      const longJob = totalLines > 100000;
+      const fileSize = await fileSizeMb(filepath);
+      const longJob = fileSize > 0.5;
 
       //save job parameters, folder path, filename in database
       let newJob;
@@ -84,7 +68,7 @@ export class JobsEqtlPlotService {
         newJob = await EqtlPlotJobsModel.build({
           job_name: createJobDto.job_name,
           jobUID,
-          inputFile: filename,
+          inputFile: filepath,
           status: JobStatus.QUEUED,
           user: user.id,
           longJob,
@@ -95,7 +79,7 @@ export class JobsEqtlPlotService {
         newJob = await EqtlPlotJobsModel.build({
           job_name: createJobDto.job_name,
           jobUID,
-          inputFile: filename,
+          inputFile: filepath,
           status: JobStatus.QUEUED,
           email: createJobDto.email,
           longJob,

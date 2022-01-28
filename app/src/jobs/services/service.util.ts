@@ -45,10 +45,16 @@ export const validateInputs = async (
     'sample_size',
   ];
 
-  //change number columns to integers
-  const columns = numberColumns.map((column) => {
-    return parseInt(createJobDto[column], 10);
-  });
+  let columns;
+  try {
+    //change number columns to integers
+    columns = numberColumns.map((column) => {
+      return parseInt(createJobDto[column], 10);
+    });
+  } catch (e) {
+    console.log(e);
+    throw new BadRequestException(e.message);
+  }
 
   //check if there are wrong column numbers
   const wrongColumn = columns.some((value) => value < 1 || value > 15);
@@ -75,13 +81,5 @@ export const validateInputs = async (
     throw new InternalServerErrorException();
   }
 
-  let filename;
-
-  if (createJobDto.useTest === 'false') {
-    filename = `/pv/analysis/${jobUID}/input/${file.filename}`;
-  } else {
-    filename = `/pv/analysis/${jobUID}/input/test.txt`;
-  }
-
-  return { jobUID, filename };
+  return { jobUID };
 };
