@@ -103,7 +103,7 @@ interface EqtlPlotAttrs {
 
 // An interface that describes the extra properties that a eqtl model has
 //collection level methods
-interface EqtlModel extends mongoose.Model<EqtlPlotDoc> {
+interface EqtlPlotModel extends mongoose.Model<EqtlPlotDoc> {
   build(attrs: EqtlPlotAttrs): EqtlPlotDoc;
 }
 
@@ -142,7 +142,7 @@ export interface EqtlPlotDoc extends mongoose.Document {
   max_anno_probe: string;
 }
 
-const EqtlPlotSchema = new mongoose.Schema<EqtlPlotDoc, EqtlModel>(
+const EqtlPlotSchema = new mongoose.Schema<EqtlPlotDoc, EqtlPlotModel>(
   {
     useTest: {
       type: Boolean,
@@ -320,7 +320,7 @@ EqtlPlotSchema.statics.build = (attrs: EqtlPlotAttrs) => {
 };
 
 //create mongoose model
-const EqtlPlotModel = mongoose.model<EqtlPlotDoc, EqtlModel>(
+const EqtlPlotModel = mongoose.model<EqtlPlotDoc, EqtlPlotModel>(
   'EqtlPlot',
   EqtlPlotSchema,
   'eqtlplots',
