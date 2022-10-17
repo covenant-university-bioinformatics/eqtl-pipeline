@@ -82,7 +82,6 @@ const EqtlJobSchema = new mongoose.Schema<EqtlJobsDoc, JobsModel>(
     inputFile: {
       type: String,
       required: [true, 'Please add a input filename'],
-      unique: true,
       trim: true,
     },
 
