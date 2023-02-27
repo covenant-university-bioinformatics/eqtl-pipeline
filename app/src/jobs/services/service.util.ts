@@ -20,8 +20,8 @@ export const validateInputs = async (
     }
 
     // if (file.mimetype !== 'text/plain') {
-    //   throw new BadRequestException('Please upload a text file');
-    // }
+    //     //   throw new BadRequestException('Please upload a text file');
+    //     // }
   }
 
   if (!user && !createJobDto.email) {
